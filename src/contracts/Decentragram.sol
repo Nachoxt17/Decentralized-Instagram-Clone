@@ -1,9 +1,7 @@
 pragma solidity ^0.5.0;
 
 contract Decentragram {
-  string public name = "Decentragram";
-  
-  //+-Store Posts/Images:_
+  string public name;
   uint public imageCount = 0;
   mapping(uint => Image) public images;
 
@@ -16,32 +14,56 @@ contract Decentragram {
   }
 
   event ImageCreated(
-    uint id, 
-    string hash, 
-    string description, 
-    uint tipAmount, 
+    uint id,
+    string hash,
+    string description,
+    uint tipAmount,
     address payable author
   );
 
-  //+-Create Posts/Images:_
-  function uploadImage(string memory _imageHash, string memory _description) public {
-    //+-Make Sure Image hash exists:_
-    require(bytes(_imageHash).length > 0);
+  event ImageTipped(
+    uint id,
+    string hash,
+    string description,
+    uint tipAmount,
+    address payable author
+  );
 
-    //+-Make Sure Image description exists:_
+  constructor() public {
+    name = "Decentragram";
+  }
+
+  function uploadImage(string memory _imgHash, string memory _description) public {
+    // Make sure the image hash exists
+    require(bytes(_imgHash).length > 0);
+    // Make sure image description exists
     require(bytes(_description).length > 0);
+    // Make sure uploader address exists
+    require(msg.sender!=address(0));
 
-    //+-Make Sure Uploader address exists:_
-    require(msg.sender != address(0));
-
-    //+-Increment ImageId/imageCount:_
+    // Increment image id
     imageCount ++;
 
-    //+-Add image to contract:_
-    images[imageCount] = Image(imageCount, _imageHash, _description, 0, msg.sender);
-
-    //+-Trigger an Event:_
-    emit ImageCreated(imageCount, _imageHash, _description, 0, msg.sender);
+    // Add Image to the contract
+    images[imageCount] = Image(imageCount, _imgHash, _description, 0, msg.sender);
+    // Trigger an event
+    emit ImageCreated(imageCount, _imgHash, _description, 0, msg.sender);
   }
-  //+-Tip Posts/Images:_
+
+  function tipImageOwner(uint _id) public payable {
+    // Make sure the id is valid
+    require(_id > 0 && _id <= imageCount);
+    // Fetch the image
+    Image memory _image = images[_id];
+    // Fetch the author
+    address payable _author = _image.author;
+    // Pay the author by sending them Ether
+    address(_author).transfer(msg.value);
+    // Increment the tip amount
+    _image.tipAmount = _image.tipAmount + msg.value;
+    // Update the image
+    images[_id] = _image;
+    // Trigger an event
+    emit ImageTipped(_id, _image.hash, _image.description, _image.tipAmount, _author);
+  }
 }
