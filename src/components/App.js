@@ -31,6 +31,23 @@ class App extends Component {
     //+-Load account:_
     const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
+
+    //+-Network ID:_
+    const networkId = await web3.eth.net.getId();
+    const networkData = Decentragram.networks[networkId];
+    if (networkData) {
+      const decentragram = web3.eth.Contract(
+        Decentragram.abi,
+        networkData.address
+      );
+      this.setState({ decentragram });
+      const imagesCount = await decentragram.methods.imageCount().call();
+      this.setState({ imagesCount });
+
+      this.setState({ loading: false });
+    } else {
+      window.alert("Decentragram contract not deployed to detected network.");
+    }
   }
   //+- }.
 
@@ -38,6 +55,9 @@ class App extends Component {
     super(props);
     this.state = {
       account: "",
+      decentragram: null,
+      images: [],
+      loading: true,
     };
   }
 
