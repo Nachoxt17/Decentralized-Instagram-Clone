@@ -6,6 +6,13 @@ import Decentragram from "../abis/Decentragram.json";
 import Navbar from "./Navbar";
 import Main from "./Main";
 
+const ipfsClient = require("ipfs-http-client");
+const ipfs = ipfsClient({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+}); // leaving out the arguments will default to these values.
+
 class App extends Component {
   //+-How to Connect our Project with MetaMask:_ {
   async componentWillMount() {
@@ -51,6 +58,40 @@ class App extends Component {
   }
   //+- }.
 
+  captureFile = (event) => {
+    //+-This function takes the Picture you Upload from your Computer and preprocess so it can be Uploaded in the I.P.F.S.:_
+    event.preventDefault();
+    const file = event.target.files[0];
+    const reader = new window.FillReader();
+    reader.readArrayBuffer(file);
+
+    reader.onloaded = () => {
+      this.setState({ buffer: Buffer(reader.result) });
+      console.log("buffer", this.state.buffer);
+    };
+  };
+
+  uploadImage = (description) => {
+    console.log("Submitting");
+
+    //+-Adding Files to the I.P.F.S.:_
+    ipfs.add(this.state.buffer, (error, result) => {
+      console.log("IPFS Result", result);
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      // this.setState({ loading: true });
+      // this.state.decentragram.methods
+      //   .uploadImage(result[0].hash, description)
+      //   .send({ from: this.state.account })
+      //   .on("transactionHash", (hash) => {
+      //     this.setState({ loading: false });
+      //   });
+    });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -70,9 +111,7 @@ class App extends Component {
             <p>Loading...</p>
           </div>
         ) : (
-          <Main
-          // Code...
-          />
+          <Main captureFile={this.captureFile} uploadImage={this.uploadImage} />
         )}
       </div>
     );
