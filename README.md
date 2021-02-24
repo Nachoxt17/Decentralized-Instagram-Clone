@@ -7,6 +7,4 @@ Made with This Tutorial in Minute 02:28:04 :_ https://www.youtube.com/watch?v=XL
 +-(1)-Connect Ganache with Metamask and create a Test Account:_ 
 https://www.linkedin.com/pulse/using-ganache-ethereum-emulator-metamask-farhan-khan/
 
-+-(2)-Login with the Metamask-Ganache Trial Account on the Page and---.
-
-+-(3)-Open the Truffle Console and Run the Command "---" and all Ready ;).
++-(2)-Login with the Metamask-Ganache Trial Account on the Page and all Ready ;).
