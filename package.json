@@ -1,7 +1,7 @@
 {
   "name": "decentralized-instagram-clone",
   "version": "0.1.0",
-  "description": "git init",
+  "description": "defi ethereum version of instagram",
   "author": "ignacioceaglio@protonmail.com",
   "dependencies": {
     "babel-polyfill": "6.26.0",
