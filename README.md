@@ -1,4 +1,6 @@
 # Decentralized-Instagram-Clone-made-with-Smart-Contracts
+![Final Result]()
+
 +-Decentralized Finance Ethereum Version of Instagram. You can connect your Metamask Wallet, upload an Image wich Post(Name and Description) will be saved in an Web Server BUT
 the Image itself will be saved in a Descentrilized InterPlanetary File System(I.P.F.S.). Posts in the DApp can Tipped with Ethereum wich will go to Post Owners's Wallets.
 
